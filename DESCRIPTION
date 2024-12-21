@@ -1,6 +1,6 @@
 Package: sesp
 Title: Spatially Explicit Stratified Power
-Version: 1.0-0
+Version: 1.0
 Authors@R: c(
       person(given = "Wenbo", family = "Lv",
              email = "lyu.geosocial@gmail.com", 
@@ -45,7 +45,7 @@ Imports:
     parallel,
     patchwork,
     purrr,
-    sdsfun (>= 0.6.0),
+    sdsfun (>= 0.7.0),
     sf,
     spatialreg,
     spdep,
@@ -54,7 +54,7 @@ Imports:
     tidyr,
     utils
 Suggests: 
-    gdverse (>= 1.3),
+    gdverse (>= 1.3-1),
     knitr,
     Rcpp,
     RcppArmadillo,
