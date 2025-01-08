@@ -152,6 +152,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// RcppGenNodeRank
+Rcpp::IntegerVector RcppGenNodeRank(Rcpp::NumericVector vec, Rcpp::NumericMatrix wt);
+RcppExport SEXP _sesp_RcppGenNodeRank(SEXP vecSEXP, SEXP wtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type vec(vecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type wt(wtSEXP);
+    rcpp_result_gen = Rcpp::wrap(RcppGenNodeRank(vec, wt));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_sesp_QuantileDisc", (DL_FUNC) &_sesp_QuantileDisc, 2},
@@ -166,6 +178,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sesp_SLMLocalQ", (DL_FUNC) &_sesp_SLMLocalQ, 3},
     {"_sesp_PrintGlobalQ", (DL_FUNC) &_sesp_PrintGlobalQ, 1},
     {"_sesp_SLMUsed", (DL_FUNC) &_sesp_SLMUsed, 2},
+    {"_sesp_RcppGenNodeRank", (DL_FUNC) &_sesp_RcppGenNodeRank, 2},
     {NULL, NULL, 0}
 };
 
