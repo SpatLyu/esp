@@ -55,12 +55,10 @@ sesp = \(formula, data, listw = NULL, discvar = "all", discnum = 3:8, model = 'o
     stop("`model` must be one of `ols`,`gwr`,`lag`,`error` or `sac` !")
   }
   doclust = FALSE
-  if (inherits(cores, "cluster")) {
+  if (cores > 1) {
     doclust = TRUE
-  } else if (cores > 1) {
-    doclust = TRUE
-    cores = parallel::makeCluster(cores)
-    on.exit(parallel::stopCluster(cores), add = TRUE)
+    cl = parallel::makeCluster(cores)
+    on.exit(parallel::stopCluster(cl), add = TRUE)
   }
 
   formula = stats::as.formula(formula)
@@ -147,7 +145,7 @@ sesp = \(formula, data, listw = NULL, discvar = "all", discnum = 3:8, model = 'o
       coefseq = seq_along(gwrcoefs)
     }
     if (doclust) {
-      out_g = parallel::parLapply(cores, coefseq, gwr_hclust,
+      out_g = parallel::parLapply(cl, coefseq, gwr_hclust,
                                   discnum = discnum, alpha = alpha, ...)
       discdf = tibble::as_tibble(do.call(rbind, out_g))
     } else {
@@ -176,7 +174,7 @@ sesp = \(formula, data, listw = NULL, discvar = "all", discnum = 3:8, model = 'o
       return(.res)
     }
     if (doclust) {
-      discdf = parallel::parLapply(cores, seq_along(discdf), bind_discdf)
+      discdf = parallel::parLapply(cl, seq_along(discdf), bind_discdf)
     } else {
       discdf = purrr::map(seq_along(discdf), bind_discdf)
     }
@@ -243,7 +241,7 @@ sesp = \(formula, data, listw = NULL, discvar = "all", discnum = 3:8, model = 'o
     return(slm_res)
   }
   if (doclust) {
-    slmres = parallel::parLapply(cores, seq_along(discdf), get_slm, listw = globallw, model = model,
+    slmres = parallel::parLapply(cl, seq_along(discdf), get_slm, listw = globallw, model = model,
                                  durbin = durbin, bw = bw, adaptive = adaptive, kernel = kernel)
   } else {
     slmres = purrr::map(seq_along(discdf), get_slm, listw = globallw, model = model,
@@ -376,7 +374,7 @@ sesp = \(formula, data, listw = NULL, discvar = "all", discnum = 3:8, model = 'o
     return(slm_res)
   }
   if (doclust) {
-    slmres = parallel::parLapply(cores, idvvar, get_idv, listw = globallw, model = model,
+    slmres = parallel::parLapply(cl, idvvar, get_idv, listw = globallw, model = model,
                                  durbin = durbin, bw = bw, adaptive = adaptive, kernel = kernel)
   } else {
     slmres = purrr::map(idvvar, get_idv, listw = globallw, model = model,

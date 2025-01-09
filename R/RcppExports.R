@@ -49,7 +49,3 @@ SLMUsed <- function(model, durbin) {
     .Call(`_sesp_SLMUsed`, model, durbin)
 }
 
-RcppGenNodeRank <- function(vec, wt) {
-    .Call(`_sesp_RcppGenNodeRank`, vec, wt)
-}
-
